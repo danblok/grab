@@ -35,7 +35,7 @@ func run(_ *cobra.Command, args []string) {
 	if err != nil {
 		fmt.Println("Something went wrong with stdin")
 	}
-	if stdinStat.Size() > 0 {
+	if stdinStat.Mode()&os.ModeCharDevice == 0 {
 		switch {
 		case quite:
 			printer.PrintQuite(os.Stdin, args)
