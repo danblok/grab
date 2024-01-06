@@ -56,14 +56,14 @@ func TestSearch(t *testing.T) {
 			},
 			want: []int{2},
 		},
-		"patterns in text are not overlapping": {
+		"pattern doesn't overlap in text": {
 			input: input{
 				text:    "aaabaaa",
 				pattern: "aaa",
 			},
 			want: []int{0, 4},
 		},
-		"patterns in text are overlapping": {
+		"pattern overlaps in text": {
 			input: input{
 				text:    "aaaaa",
 				pattern: "aa",
@@ -75,7 +75,7 @@ func TestSearch(t *testing.T) {
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
 			got := Search(tt.text, tt.pattern)
-			assert.ElementsMatch(t, tt.want, got)
+			assert.Equal(t, tt.want, got)
 		})
 	}
 }
