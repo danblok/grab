@@ -3,7 +3,7 @@ package algorithm
 // Search is a wrapper around the 'search' function.
 // It converts string inputs to rune slices and passess them forward.
 func Search(text, pattern string) []int {
-	if len(pattern) > len(text) {
+	if len(pattern) > len(text) || len(pattern) == 0 || len(text) == 0 {
 		return []int{}
 	}
 
