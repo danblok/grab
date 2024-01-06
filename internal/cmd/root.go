@@ -11,7 +11,7 @@ import (
 func init() {
 	rootCmd.PersistentFlags().StringSliceVarP(&files, "files", "f", []string{}, "Attach files where the pattern will be searched")
 	rootCmd.PersistentFlags().BoolVarP(&quite, "quite", "q", false, "Print the output without line indicators")
-	rootCmd.PersistentFlags().BoolVarP(&minimum, "min", "m", false, "Print the output in format \"<line_number> <pattern1_start_idx> <pattern1_end_idx> <pattern2_start_idx> <pattern2_end_idx>\"")
+	rootCmd.PersistentFlags().BoolVarP(&nonhuman, "nonhuman", "n", false, "Print the output in format \"<line_number> <pattern1_start_idx> <pattern1_end_idx> <pattern2_start_idx> <pattern2_end_idx>\"")
 }
 
 var rootCmd = &cobra.Command{
@@ -24,35 +24,42 @@ the pattern was found. The patterns are marked with red color.`,
 }
 
 var (
-	files   []string
-	quite   bool
-	minimum bool
+	files    []string
+	quite    bool
+	nonhuman bool
 )
 
 func run(_ *cobra.Command, args []string) {
 	// search in stdin
-	switch {
-	case quite:
-		printer.PrintQuite(os.Stdin, args)
-	case minimum:
-		printer.PrintMinimum(os.Stdin, args)
-	default:
-		printer.PrintDefault(os.Stdin, "stdin", args)
+	stdinStat, err := os.Stdin.Stat()
+	if err != nil {
+		fmt.Println("Something went wrong with stdin")
+	}
+	if stdinStat.Size() > 0 {
+		switch {
+		case quite:
+			printer.PrintQuite(os.Stdin, args)
+		case nonhuman:
+			printer.PrintNonHuman(os.Stdin, args)
+		default:
+			printer.PrintDefault(os.Stdin, "stdin", args)
+
+		}
 	}
 
 	// search in files
 	for _, file := range files {
 		f, err := os.Open(file)
 		if err != nil {
-			fmt.Printf("Couldn't process the file: %s", f.Name())
+			fmt.Printf("Couldn't process the file: %s\n", file)
 			continue
 		}
 
 		switch {
 		case quite:
 			printer.PrintQuite(f, args)
-		case minimum:
-			printer.PrintMinimum(f, args)
+		case nonhuman:
+			printer.PrintNonHuman(f, args)
 		default:
 			printer.PrintDefault(f, f.Name(), args)
 		}
