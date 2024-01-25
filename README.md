@@ -1,5 +1,7 @@
 # GRAB
+
 A CLI program that searches for patterns in text.
+
 ## Overview
 
 The CLI searches patterns passed as positional arguments in text passed via piping and in attached files.
@@ -8,9 +10,13 @@ It uses _Boyer-Moore-Horspool_ algorithm for searching pattern in a string under
 
 ## Installing
 
-Refer to [Releases](https://github.com/danblok/grab/releases)
+Install with `go install`
 
-The latest release here [latest](https://github.com/danblok/grab/releases/tag/v0.1.1)
+`go install github.com/danblok/grab/cmd/grab@latest`
+
+Check out available releases [Releases](https://github.com/danblok/grab/releases)
+
+The latest release here [latest](https://github.com/danblok/grab/releases/tag/v0.1.2)
 
 ## How to use
 
